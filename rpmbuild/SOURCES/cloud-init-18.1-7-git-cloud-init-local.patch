@@ -1,0 +1,17 @@
+diff -uNr ORIG-cloud-init-18.1-7-gf9f7ffd7/sysvinit/redhat/cloud-init-local cloud-init-18.1-7-gf9f7ffd7/sysvinit/redhat/cloud-init-local
+--- ORIG-cloud-init-18.1-7-gf9f7ffd7/sysvinit/redhat/cloud-init-local	2018-03-03 02:53:48.000000000 +0900
++++ cloud-init-18.1-7-gf9f7ffd7/sysvinit/redhat/cloud-init-local	2018-04-24 10:16:26.700000408 +0900
+@@ -56,6 +56,13 @@
+     [ -x $cloud_init ] || return 5
+     [ -f $conf ] || return 6
+ 
++    UUID_uppper=$(find /var/lib/cloud/ -type l -ls|awk -F'/' {'print $NF'}|tr a-z A-Z)
++    dmidecode|grep $UUID_uppper>/dev/null 2>&1;RET=$(echo $?)
++    if [ $RET -eq 0 ];then
++        echo "Check instance_uuid"
++        rm -rf /var/lib/cloud/instance/obj.pkl
++    fi
++
+     echo -n $"Starting $prog: "
+     $cloud_init $CLOUDINITARGS init --local
+     RETVAL=$?

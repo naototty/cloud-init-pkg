@@ -14,8 +14,9 @@
 
 Name:           cloud-init
 Version:        18.1+7.gf9f7ffd7
-## Release:        1%{?dist}
-Release:        1.1%{?dist}
+## Release:        1%%{?dist}
+##Release:        1.1%%{?dist}
+Release:        1.2%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -30,6 +31,8 @@ BuildRoot:      %{_tmppath}
 #  cp /etc/cloud/cloud.cfg SOURCES/cloud-init-cloud.cfg-ZCOM-ENT
 Source10001:    cloud-init-tmpfiles.conf-rhel-run-tmp
 Source10002:    cloud-init-cloud.cfg-ZCOM-ENT
+
+Patch10011:     cloud-init-18.1-7-git-cloud-init-local.patch
 
 %if "%{?el6}" == "1"
 BuildRequires:  python-argparse
@@ -117,6 +120,8 @@ ssh keys and to let the user run various scripts.
 
 %prep
 %setup -q -n cloud-init-18.1-7-gf9f7ffd7
+
+%patch10011 -p1
 
 # Custom patches activation
 
@@ -265,6 +270,11 @@ fi
 
 
 %changelog
+* Fri Apr  7 2018 Naoto Gohko <naoto-gohko@gmo.jp> 18.1-1.2
+- change flag: /etc/cloud/cloud.cfg; growpart: {mode: false}
+- fixed instance uuid workarround by cloud-init-local init script
+- change purege
+
 * Wed Mar  7 2018 Naoto Gohko <naoto-gohko@gmo.jp> 18.1-1.1
 - update base 18.1-1(git)
 
