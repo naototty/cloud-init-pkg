@@ -6,7 +6,7 @@ diff -uNr ORIG-cloud-init-18.1-7-gf9f7ffd7/sysvinit/redhat/cloud-init-local clou
      [ -f $conf ] || return 6
  
 +    UUID_uppper=$(find /var/lib/cloud/ -type l -ls|awk -F'/' {'print $NF'}|tr a-z A-Z)
-+    dmidecode|grep $UUID_uppper>/dev/null 2>&1;RET=$(echo $?)
++    RET=$( dmidecode|grep -c $UUID_uppper )
 +    if [ $RET -eq 0 ];then
 +        echo "Check instance_uuid"
 +        rm -rf /var/lib/cloud/instance/obj.pkl
